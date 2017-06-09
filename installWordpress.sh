@@ -19,6 +19,13 @@ unzipWordpress() {
 	mv wordpressTemp/wordpress $1
 }
 
+changePermissions() {
+	cd $1
+	chown www-data:www-data  -R *
+	find . -type d -exec chmod 755 {} \;
+	find . -type f -exec chmod 644 {} \;
+}
+
 clean() {
 	rm -rf wordpressDownload.html wordpress.zip wordpressTemp/
 }
@@ -31,6 +38,7 @@ if [ $# -ge 1 ]; then
 	getLastestVersionUrl
 	installWordpress $WORDPRESS_URL
 	unzipWordpress $1
+	changePermissions $1
 	clean
 	echo "------------- DONE"
 fi
